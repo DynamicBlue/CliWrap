@@ -1,7 +1,7 @@
 ﻿using System;
-using CliWrap.Models;
+using CliShellWrap.Models;
 
-namespace CliWrap.Exceptions
+namespace CliShellWrap.Exceptions
 {
     /// <summary>
     /// Base class for exceptions that are thrown when an instance of <see cref="ExecutionResult"/> fails a certain validation.

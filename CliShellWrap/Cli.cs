@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CliWrap.Exceptions;
-using CliWrap.Internal;
-using CliWrap.Models;
+using CliShellWrap.Exceptions;
+using CliShellWrap.Internal;
+using CliShellWrap.Models;
 
-namespace CliWrap
+namespace CliShellWrap
 {
     /// <summary>
     /// Command line interface wrapper.

@@ -3,12 +3,12 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CliWrap.Exceptions;
-using CliWrap.Models;
-using CliWrap.Tests.Internal;
+using CliShellWrap.Exceptions;
+using CliShellWrap.Models;
+using CliShellWrap.Tests.Internal;
 using NUnit.Framework;
 
-namespace CliWrap.Tests
+namespace CliShellWrap.Tests
 {
     [TestFixture]
     [Timeout(5000)]

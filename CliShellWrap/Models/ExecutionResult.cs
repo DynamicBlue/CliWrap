@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CliWrap.Models
+namespace CliShellWrap.Models
 {
     /// <summary>
     /// Output produced by executing a process.

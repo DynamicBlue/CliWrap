@@ -4,10 +4,10 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CliWrap.Exceptions;
-using CliWrap.Models;
+using CliShellWrap.Exceptions;
+using CliShellWrap.Models;
 
-namespace CliWrap
+namespace CliShellWrap
 {
     /// <summary>
     /// An interface for <see cref="Cli"/>.

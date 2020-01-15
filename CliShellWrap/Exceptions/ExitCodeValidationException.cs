@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using CliWrap.Models;
+using CliShellWrap.Models;
 
-namespace CliWrap.Exceptions
+namespace CliShellWrap.Exceptions
 {
     /// <summary>
     /// Thrown if underlying process reported a non-zero exit code.

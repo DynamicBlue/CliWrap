@@ -1,16 +1,16 @@
-# CliWrap
+# CliShellWrap
 
-[![Build](https://github.com/Tyrrrz/CliWrap/workflows/CI/badge.svg?branch=master)](https://github.com/Tyrrrz/CliWrap/actions)
-[![Coverage](https://codecov.io/gh/Tyrrrz/CliWrap/branch/master/graph/badge.svg)](https://codecov.io/gh/Tyrrrz/CliWrap)
-[![Version](https://img.shields.io/nuget/v/CliWrap.svg)](https://nuget.org/packages/CliWrap)
-[![Downloads](https://img.shields.io/nuget/dt/CliWrap.svg)](https://nuget.org/packages/CliWrap)
+[![Build](https://github.com/Tyrrrz/CliShellWrap/workflows/CI/badge.svg?branch=master)](https://github.com/Tyrrrz/CliShellWrap/actions)
+[![Coverage](https://codecov.io/gh/Tyrrrz/CliShellWrap/branch/master/graph/badge.svg)](https://codecov.io/gh/Tyrrrz/CliShellWrap)
+[![Version](https://img.shields.io/nuget/v/CliShellWrap.svg)](https://nuget.org/packages/CliShellWrap)
+[![Downloads](https://img.shields.io/nuget/dt/CliShellWrap.svg)](https://nuget.org/packages/CliShellWrap)
 [![Donate](https://img.shields.io/badge/donate-$$$-purple.svg)](https://tyrrrz.me/donate)
 
-CliWrap is a library that makes it easier to interact with command line interfaces. It provides a convenient wrapper around the target executable, allowing you to pass execution parameters and read the resulting output. The library can also handle errors reported by the underlying process, allows command cancellation and has both synchronous and asynchronous APIs.
+CliShellWrap is a library that makes it easier to interact with command line interfaces. It provides a convenient wrapper around the target executable, allowing you to pass execution parameters and read the resulting output. The library can also handle errors reported by the underlying process, allows command cancellation and has both synchronous and asynchronous APIs.
 
 ## Download
 
-- [NuGet](https://nuget.org/packages/CliWrap): `dotnet add package CliWrap`
+- [NuGet](https://nuget.org/packages/CliShellWrap): `dotnet add package CliShellWrap`
 
 ## Features
 

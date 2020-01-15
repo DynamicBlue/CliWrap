@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../CliWrap.props" />
+  <Import Project="../CliShellWrap.props" />
 
   <PropertyGroup>
     <TargetFrameworks>net45;netcoreapp3.0;netstandard2.0</TargetFrameworks>
     <Authors>$(Company)</Authors>
     <Description>Wrapper for command line interface executables</Description>
     <PackageTags>command line executable interface wrapper standard input output error arguments net core</PackageTags>
-    <PackageProjectUrl>https://github.com/Tyrrrz/CliWrap</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/Tyrrrz/CliWrap/blob/master/Changelog.md</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/Tyrrrz/CliShellWrap</PackageProjectUrl>
+    <PackageReleaseNotes>https://github.com/Tyrrrz/CliShellWrap/blob/master/Changelog.md</PackageReleaseNotes>
     <PackageIcon>favicon.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>

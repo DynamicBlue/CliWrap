@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Management;
 
-namespace CliWrap.Tests.Internal
+namespace CliShellWrap.Tests.Internal
 {
     internal static class ProcessEx
     {

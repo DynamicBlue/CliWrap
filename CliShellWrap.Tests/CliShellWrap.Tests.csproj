@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="../CliWrap.props" />
+  <Import Project="../CliShellWrap.props" />
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CliWrap\CliWrap.csproj" />
+    <ProjectReference Include="..\CliShellWrap\CliShellWrap.csproj" />
   </ItemGroup>
 
   <ItemGroup>

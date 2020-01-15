@@ -5,7 +5,7 @@ using System.Linq;
 using System.Management;
 #endif
 
-namespace CliWrap.Internal
+namespace CliShellWrap.Internal
 {
     internal static class ProcessEx
     {
