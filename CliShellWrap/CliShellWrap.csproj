@@ -3,20 +3,24 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45;netcoreapp3.0;netstandard2.0</TargetFrameworks>
-    <Authors>$(Company)</Authors>
-    <Description>Wrapper for command line interface executables</Description>
+    <Authors></Authors>
+    <Description></Description>
     <PackageTags>command line executable interface wrapper standard input output error arguments net core</PackageTags>
     <PackageProjectUrl>https://github.com/Tyrrrz/CliShellWrap</PackageProjectUrl>
-    <PackageReleaseNotes>https://github.com/Tyrrrz/CliShellWrap/blob/master/Changelog.md</PackageReleaseNotes>
+    <PackageReleaseNotes></PackageReleaseNotes>
     <PackageIcon>favicon.png</PackageIcon>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <PublishRepositoryUrl>True</PublishRepositoryUrl>
     <EmbedUntrackedSources>True</EmbedUntrackedSources>
-    <IncludeSymbols>True</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!--<IncludeSymbols>True</IncludeSymbols>-->
+    <!--<SymbolPackageFormat>snupkg</SymbolPackageFormat>-->
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>2.8.1</Version>
+    <AssemblyVersion>2.8.1.0</AssemblyVersion>
+    <Copyright />
+    <Company />
   </PropertyGroup>
 
   <ItemGroup>
