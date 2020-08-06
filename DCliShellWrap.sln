@@ -14,9 +14,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CliShellWrap", "CliShellWra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CliShellWrap.Tests", "CliShellWrap.Tests\CliShellWrap.Tests.csproj", "{890D9A75-4B00-4D89-AAF8-936726B45410}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShellCmdTest", "TestIn\ShellCmdTest\ShellCmdTest.csproj", "{50F815BE-5BD5-4B1C-94B5-E94258B571AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShellCmdTest", "TestIn\ShellCmdTest\ShellCmdTest.csproj", "{50F815BE-5BD5-4B1C-94B5-E94258B571AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CliShellWrapLib", "CliShellWrapLib\CliShellWrapLib.csproj", "{369AD807-37C6-493B-9F51-D74E7A5DDEFA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CliShellWrapLib", "CliShellWrapLib\CliShellWrapLib.csproj", "{369AD807-37C6-493B-9F51-D74E7A5DDEFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

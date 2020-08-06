@@ -40,9 +40,13 @@ namespace CliShellWrap
         /// <summary>
         /// Initializes an instance of <see cref="Cli"/> on the target executable.
         /// </summary>
-        public Cli(string filePath)
+        public Cli(string filePath,string args=null)
         {
             _filePath = filePath;
+            if (!string.IsNullOrEmpty(args))
+            {
+                _arguments = args;
+            }
         }
 
         #region Options
@@ -362,6 +366,6 @@ namespace CliShellWrap
         /// <summary>
         /// Initializes an instance of <see cref="ICli"/> on the target executable.
         /// </summary>
-        public static ICli Wrap(string filePath) => new Cli(filePath);
+        public static ICli Wrap(string filePath,string arguments=null) => new Cli(filePath, arguments);
     }
 }
