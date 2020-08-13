@@ -37,11 +37,12 @@ namespace CliShellWrap.Internal
             _nativeProcess = new Process {StartInfo = startInfo};
 
             // Configure start info
-            _nativeProcess.StartInfo.CreateNoWindow = true;
+            _nativeProcess.StartInfo.CreateNoWindow = false;
             _nativeProcess.StartInfo.RedirectStandardOutput = true;
             _nativeProcess.StartInfo.RedirectStandardError = true;
             _nativeProcess.StartInfo.RedirectStandardInput = true;
-            _nativeProcess.StartInfo.UseShellExecute = false;
+            _nativeProcess.StartInfo.UseShellExecute = false ;
+           // _nativeProcess.StartInfo.Arguments = arguments.AddQuietSwitch();
 
             // Wire exit event
             _nativeProcess.EnableRaisingEvents = true;
@@ -57,12 +58,17 @@ namespace CliShellWrap.Internal
             // Wire stdout
             _nativeProcess.OutputDataReceived += (sender, args) =>
             {
+              //  var sr = _nativeProcess.StandardOutput;
                 // Actual data
-                if (args.Data != null)
+                if (args.Data != null&&!string.IsNullOrEmpty(args.Data))
                 {
+                  //  if (!sr.EndOfStream)
+                    {
+                        _standardOutputBuffer.AppendLine(args.Data);
+                        standardOutputObserver?.Invoke(args.Data);
+                    }
                     // Write to buffer and invoke observer
-                    _standardOutputBuffer.AppendLine(args.Data);
-                    standardOutputObserver?.Invoke(args.Data);
+                    
                 }
                 // Null means end of stream
                 else
@@ -111,8 +117,9 @@ namespace CliShellWrap.Internal
 
         public void PipeStandardInput(Stream stream)
         {
+
             // Copy stream and close stdin
-            using (_nativeProcess.StandardInput)
+          //  using (_nativeProcess.StandardInput)
                 stream.CopyTo(_nativeProcess.StandardInput.BaseStream);
         }
 
@@ -186,7 +193,7 @@ namespace CliShellWrap.Internal
 
                 _isReading = false;
             }
-
+            _nativeProcess.StandardInput.Dispose();
             // Dispose dependencies
             _nativeProcess.Dispose();
             _exitSignal.Dispose();

@@ -37,6 +37,8 @@ namespace CliShellWrap
         /// <inheritdoc />
         public int? ProcessId { get; private set; }
 
+        internal CliProcess CurrentProcess { get; set; }
+
         /// <summary>
         /// Initializes an instance of <see cref="Cli"/> on the target executable.
         /// </summary>
@@ -138,6 +140,12 @@ namespace CliShellWrap
         public ICli SetStandardInput(Stream standardInput)
         {
             _standardInput = standardInput;
+            if (this.CurrentProcess != null)
+            {
+                this.CurrentProcess.PipeStandardInput(standardInput);
+                Console.WriteLine(this.CurrentProcess.StandardOutput);
+            }
+            
             return this;
         }
 
@@ -282,37 +290,53 @@ namespace CliShellWrap
             if (_standardErrorValidation && !string.IsNullOrWhiteSpace(result.StandardError))
                 throw new StandardErrorValidationException(result);
         }
-
+     
         /// <inheritdoc />
-        public ExecutionResult Execute()
+        public ExecutionResult Execute(bool reuse=false)
         {
             // Set up execution context
-            using var process = StartProcess();
-            using (_cancellationToken.Register(() => process.TryKill(_killEntireProcessTree)))
+         
+            CliProcess process = StartProcess();
+            try
             {
-                ProcessId = process.Id;
+                if (reuse)
+                {
+                    this.CurrentProcess = process;
+                }
+                using (_cancellationToken.Register(() => process.TryKill(_killEntireProcessTree)))
+                {
+                    ProcessId = process.Id;
 
-                // Pipe stdin
-                process.PipeStandardInput(_standardInput);
+                    // Pipe stdin
+                    process.PipeStandardInput(_standardInput);
 
-                // Wait for exit
-                process.WaitForExit();
+                    // Wait for exit
+                    process.WaitForExit();
 
-                // Throw if cancelled
-                _cancellationToken.ThrowIfCancellationRequested();
+                    // Throw if cancelled
+                    _cancellationToken.ThrowIfCancellationRequested();
 
-                // Create execution result
-                var result = new ExecutionResult(process.ExitCode,
-                    process.StandardOutput,
-                    process.StandardError,
-                    process.StartTime,
-                    process.ExitTime);
+                    // Create execution result
+                    var result = new ExecutionResult(process.ExitCode,
+                        process.StandardOutput,
+                        process.StandardError,
+                        process.StartTime,
+                        process.ExitTime);
 
-                // Validate execution result
-                ValidateExecutionResult(result);
+                    // Validate execution result
+                    ValidateExecutionResult(result);
 
-                return result;
+                    return result;
+                }
             }
+            finally {
+                if (!reuse)
+                {
+                    process.Dispose();
+                }
+                
+            }
+         
         }
 
         /// <inheritdoc />
