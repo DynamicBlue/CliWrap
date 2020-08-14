@@ -15,6 +15,8 @@ namespace CliShellWrap.Internal
         private readonly StringBuilder _standardErrorBuffer = new StringBuilder();
         private readonly Signal _standardErrorEndSignal = new Signal();
 
+        public BinaryWriter InputWrite { get; private set; }
+
         private bool _isReading;
 
         public DateTimeOffset StartTime { get; private set; }
@@ -110,17 +112,35 @@ namespace CliShellWrap.Internal
             // Begin reading streams
             _nativeProcess.BeginOutputReadLine();
             _nativeProcess.BeginErrorReadLine();
-
+            
+            InputWrite = new BinaryWriter(_nativeProcess.StandardInput.BaseStream);
             // Set flag
             _isReading = true;
         }
 
         public void PipeStandardInput(Stream stream)
         {
-
+            if (stream.GetType().FullName.Contains("NullStream"))
+            {
+                return;
+            }
+       
+       
+            if (stream.CanRead)
+            {
+                stream.Position = 0;
+                byte[] buffer=new byte[stream.Length];
+                stream.Read(buffer, 0, buffer.Length);
+                var inputStr=System.Text.Encoding.UTF8.GetString(buffer);
+                _nativeProcess.StandardInput.WriteLine(inputStr);
+               // this.InputWrite.Write(buffer);
+                   
+            }
+            
+           // BinaryWriter writer = new BinaryWriter(_nativeProcess.StandardInput.BaseStream);
             // Copy stream and close stdin
-          //  using (_nativeProcess.StandardInput)
-                stream.CopyTo(_nativeProcess.StandardInput.BaseStream);
+            //  using (_nativeProcess.StandardInput)
+           // stream.CopyTo(_nativeProcess.StandardInput.BaseStream);
         }
 
         public async Task PipeStandardInputAsync(Stream stream)

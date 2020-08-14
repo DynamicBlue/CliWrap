@@ -139,6 +139,10 @@ namespace CliShellWrap
         /// <inheritdoc />
         public ICli SetStandardInput(Stream standardInput)
         {
+            if (standardInput == Stream.Null)
+            {
+                return this;
+            }
             _standardInput = standardInput;
             if (this.CurrentProcess != null)
             {

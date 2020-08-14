@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Threading;
 
 namespace CMDDemo
 {
@@ -6,16 +8,26 @@ namespace CMDDemo
     {
         static void Main(string[] args)
         {
-           
-            Console.WriteLine("hello CliShellWrap!");
-
-            while (true)
+            BinaryWriter writer = new BinaryWriter(Console.OpenStandardOutput());
+            byte p = 0;
+            do
             {
-                var abc = Console.ReadLine();
-                Console.WriteLine("接收到输入"+abc);
-
+                writer.Write(p);
+                Thread.Sleep(50);
+                p++;
             }
-            Console.ReadLine();
+            while (p <= 100);
+            writer.Close();
+
+            //Console.WriteLine("hello CliShellWrap!");
+
+            //while (true)
+            //{
+            //    var abc = Console.ReadLine();
+            //    Console.WriteLine("接收到输入"+abc);
+
+            //}
+            //Console.ReadLine();
         }
     }
 }
