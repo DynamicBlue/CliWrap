@@ -42,7 +42,7 @@ namespace CliShellWrap
         /// <summary>
         /// Initializes an instance of <see cref="Cli"/> on the target executable.
         /// </summary>
-        public Cli(string filePath,string args=null)
+        public Cli(string filePath, string args = null)
         {
             _filePath = filePath;
             if (!string.IsNullOrEmpty(args))
@@ -147,9 +147,8 @@ namespace CliShellWrap
             if (this.CurrentProcess != null)
             {
                 this.CurrentProcess.PipeStandardInput(standardInput);
-                Console.WriteLine(this.CurrentProcess.StandardOutput);
             }
-            
+
             return this;
         }
 
@@ -294,55 +293,87 @@ namespace CliShellWrap
             if (_standardErrorValidation && !string.IsNullOrWhiteSpace(result.StandardError))
                 throw new StandardErrorValidationException(result);
         }
-     
+
         /// <inheritdoc />
-        public ExecutionResult Execute(bool reuse=false)
+        public async Task<ExecutionResult> ListenAsync(bool reuse = true)
+        {
+          return  await Task.Run(async ()=> {
+                CliProcess process = StartProcess();
+                try
+                {
+                    if (reuse)
+                    {
+                        this.CurrentProcess = process;
+                    }
+                    using (_cancellationToken.Register(() => process.TryKill(_killEntireProcessTree)))
+                    {
+                        ProcessId = process.Id;
+
+                        // Pipe stdin
+                       process.PipeStandardInput(_standardInput);
+
+                        // Wait for exit
+                       await process.WaitForExitAsync();
+
+                        // Throw if cancelled
+                        _cancellationToken.ThrowIfCancellationRequested();
+
+                        // Create execution result
+                        var result = new ExecutionResult(process.ExitCode,
+                            process.StandardOutput,
+                            process.StandardError,
+                            process.StartTime,
+                            process.ExitTime);
+
+                        // Validate execution result
+                        ValidateExecutionResult(result);
+                        return result;
+                    }
+                }
+                finally
+                {
+                    if (!reuse)
+                    {
+                        process.Dispose();
+                    }
+
+                }
+            });
+            // Set up execution context
+
+            
+
+        }
+        public  ExecutionResult Execute()
         {
             // Set up execution context
-         
-            CliProcess process = StartProcess();
-            try
+            using var process = StartProcess();
+            using (_cancellationToken.Register(() => process.TryKill(_killEntireProcessTree)))
             {
-                if (reuse)
-                {
-                    this.CurrentProcess = process;
-                }
-                using (_cancellationToken.Register(() => process.TryKill(_killEntireProcessTree)))
-                {
-                    ProcessId = process.Id;
+                ProcessId = process.Id;
 
-                    // Pipe stdin
-                    process.PipeStandardInput(_standardInput);
+                // Pipe stdin
+                 process.PipeStandardInput(_standardInput);
 
-                    // Wait for exit
-                    process.WaitForExit();
+                // Wait for exit
+                 process.WaitForExit();
 
-                    // Throw if cancelled
-                    _cancellationToken.ThrowIfCancellationRequested();
+                // Throw if cancelled
+                _cancellationToken.ThrowIfCancellationRequested();
 
-                    // Create execution result
-                    var result = new ExecutionResult(process.ExitCode,
-                        process.StandardOutput,
-                        process.StandardError,
-                        process.StartTime,
-                        process.ExitTime);
+                // Create execution result
+                var result = new ExecutionResult(process.ExitCode,
+                    process.StandardOutput,
+                    process.StandardError,
+                    process.StartTime,
+                    process.ExitTime);
 
-                    // Validate execution result
-                    ValidateExecutionResult(result);
+                // Validate execution result
+                ValidateExecutionResult(result);
 
-                    return result;
-                }
+                return result;
             }
-            finally {
-                if (!reuse)
-                {
-                    process.Dispose();
-                }
-                
-            }
-         
         }
-
         /// <inheritdoc />
         public async Task<ExecutionResult> ExecuteAsync()
         {
@@ -394,6 +425,6 @@ namespace CliShellWrap
         /// <summary>
         /// Initializes an instance of <see cref="ICli"/> on the target executable.
         /// </summary>
-        public static ICli Wrap(string filePath,string arguments=null) => new Cli(filePath, arguments);
+        public static ICli Wrap(string filePath, string arguments = null) => new Cli(filePath, arguments);
     }
 }

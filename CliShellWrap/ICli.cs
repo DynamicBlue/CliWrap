@@ -111,12 +111,14 @@ namespace CliShellWrap
         /// <summary>
         /// Executes the process and synchronously waits for it to exit.
         /// </summary>
-        ExecutionResult Execute(bool reuse=false);
+        Task<ExecutionResult> ListenAsync(bool reuse=true);
 
         /// <summary>
         /// Executes the process and asynchronously waits for it to exit.
         /// </summary>
         Task<ExecutionResult> ExecuteAsync();
+
+        ExecutionResult Execute();
 
         /// <summary>
         /// Executes the process and doesn't wait for it to exit.

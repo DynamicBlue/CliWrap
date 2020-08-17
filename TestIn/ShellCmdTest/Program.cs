@@ -25,14 +25,17 @@ namespace ShellCmdTest
                     cli.SetStandardOutputCallback((r)=> {
                         Console.WriteLine(r);
                     });
-                    ThreadPool.QueueUserWorkItem((obj)=> {
-                        var result = cli.Execute(true);
-                    });
+                    var result = cli.ListenAsync();
+                    //ThreadPool.QueueUserWorkItem((obj)=> {
+                    //    var result = cli.Execute();
+                    //});
                     Thread.Sleep(5000);
                     while (true)
                     {
                         var cmd = Console.ReadLine();
                         cli.SetStandardInput(cmd);
+
+
                         //cli.ExecuteAsync();
                     }
 

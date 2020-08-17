@@ -15,7 +15,7 @@ namespace CliShellWrap.Internal
         private readonly StringBuilder _standardErrorBuffer = new StringBuilder();
         private readonly Signal _standardErrorEndSignal = new Signal();
 
-        public BinaryWriter InputWrite { get; private set; }
+        //public BinaryWriter InputWrite { get; private set; }
 
         private bool _isReading;
 
@@ -36,15 +36,15 @@ namespace CliShellWrap.Internal
             Action? standardOutputClosedObserver = null, Action? standardErrorClosedObserver = null)
         {
             // Create underlying process
-            _nativeProcess = new Process {StartInfo = startInfo};
+            _nativeProcess = new Process { StartInfo = startInfo };
 
             // Configure start info
             _nativeProcess.StartInfo.CreateNoWindow = false;
             _nativeProcess.StartInfo.RedirectStandardOutput = true;
             _nativeProcess.StartInfo.RedirectStandardError = true;
             _nativeProcess.StartInfo.RedirectStandardInput = true;
-            _nativeProcess.StartInfo.UseShellExecute = false ;
-           // _nativeProcess.StartInfo.Arguments = arguments.AddQuietSwitch();
+            _nativeProcess.StartInfo.UseShellExecute = false;
+            // _nativeProcess.StartInfo.Arguments = arguments.AddQuietSwitch();
 
             // Wire exit event
             _nativeProcess.EnableRaisingEvents = true;
@@ -60,17 +60,16 @@ namespace CliShellWrap.Internal
             // Wire stdout
             _nativeProcess.OutputDataReceived += (sender, args) =>
             {
-              //  var sr = _nativeProcess.StandardOutput;
+                //  var sr = _nativeProcess.StandardOutput;
                 // Actual data
-                if (args.Data != null&&!string.IsNullOrEmpty(args.Data))
+                if (args.Data != null && !string.IsNullOrEmpty(args.Data))
                 {
-                  //  if (!sr.EndOfStream)
-                    {
-                        _standardOutputBuffer.AppendLine(args.Data);
-                        standardOutputObserver?.Invoke(args.Data);
-                    }
+
+                    _standardOutputBuffer.AppendLine(args.Data);
+                    standardOutputObserver?.Invoke(args.Data);
+
                     // Write to buffer and invoke observer
-                    
+
                 }
                 // Null means end of stream
                 else
@@ -112,8 +111,8 @@ namespace CliShellWrap.Internal
             // Begin reading streams
             _nativeProcess.BeginOutputReadLine();
             _nativeProcess.BeginErrorReadLine();
-            
-            InputWrite = new BinaryWriter(_nativeProcess.StandardInput.BaseStream);
+
+            //  InputWrite = new BinaryWriter(_nativeProcess.StandardInput.BaseStream);
             // Set flag
             _isReading = true;
         }
@@ -124,23 +123,20 @@ namespace CliShellWrap.Internal
             {
                 return;
             }
-       
-       
             if (stream.CanRead)
             {
                 stream.Position = 0;
-                byte[] buffer=new byte[stream.Length];
+                byte[] buffer = new byte[stream.Length];
                 stream.Read(buffer, 0, buffer.Length);
-                var inputStr=System.Text.Encoding.UTF8.GetString(buffer);
+                var inputStr = System.Text.Encoding.UTF8.GetString(buffer);
                 _nativeProcess.StandardInput.WriteLine(inputStr);
-               // this.InputWrite.Write(buffer);
-                   
+
             }
-            
-           // BinaryWriter writer = new BinaryWriter(_nativeProcess.StandardInput.BaseStream);
+
+            // BinaryWriter writer = new BinaryWriter(_nativeProcess.StandardInput.BaseStream);
             // Copy stream and close stdin
             //  using (_nativeProcess.StandardInput)
-           // stream.CopyTo(_nativeProcess.StandardInput.BaseStream);
+            // stream.CopyTo(_nativeProcess.StandardInput.BaseStream);
         }
 
         public async Task PipeStandardInputAsync(Stream stream)
@@ -148,6 +144,11 @@ namespace CliShellWrap.Internal
             // Copy stream and close stdin
             using (_nativeProcess.StandardInput)
                 await stream.CopyToAsync(_nativeProcess.StandardInput.BaseStream);
+        }
+        public async Task PipeStandardInputAsync(string inputStr)
+        {
+           await _nativeProcess.StandardInput.WriteLineAsync(inputStr);
+         
         }
 
         public void WaitForExit()
