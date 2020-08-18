@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CliShellWrap\CliShellWrap.csproj" />
+    <ProjectReference Include="..\CliShellWrap\CDShellWrap.csproj" />
   </ItemGroup>
 
   <ItemGroup>

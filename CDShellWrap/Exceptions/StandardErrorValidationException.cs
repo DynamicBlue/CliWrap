@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using CliShellWrap.Models;
+using CDShellWrap.Models;
 
-namespace CliShellWrap.Exceptions
+namespace CDShellWrap.Exceptions
 {
     /// <summary>
     /// Thrown if underlying process reported an error.

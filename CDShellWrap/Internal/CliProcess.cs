@@ -4,7 +4,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CliShellWrap.Internal
+namespace CDShellWrap.Internal
 {
     internal class CliProcess : IDisposable
     {

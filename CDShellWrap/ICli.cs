@@ -4,15 +4,15 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using CliShellWrap.Exceptions;
-using CliShellWrap.Models;
+using CDShellWrap.Exceptions;
+using CDShellWrap.Models;
 
-namespace CliShellWrap
+namespace CDShellWrap
 {
     /// <summary>
     /// An interface for <see cref="Cli"/>.
     /// </summary>
-    public interface ICli
+    public interface ICli:IDisposable
     {
         /// <summary>
         /// Process ID associated with the last execution or null if the process hasn't been started yet.
