@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dynamic.Core" Version="2.1.7.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CDShellWrap\CDShellWrap.csproj" />
   </ItemGroup>
 

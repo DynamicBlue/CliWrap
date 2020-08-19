@@ -1,4 +1,5 @@
 ﻿using CDShellWrap;
+using CDynamic.StdIODriver.Modes;
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -16,6 +17,7 @@ namespace CDynamic.StdIODriver
         /// 连接字符串(连接子进程的路径)
         /// </summary>
         public string ConnectionStr { get; set; }
+        public ConnectConfig ConConfig { get; set; }
 
         protected ICli CliDriver { get; set; }
 
