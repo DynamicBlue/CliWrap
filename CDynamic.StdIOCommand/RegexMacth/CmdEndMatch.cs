@@ -13,7 +13,7 @@ namespace CDynamic.StdIODriver.RegexMacth
             bool isMatch = false;
             if (!string.IsNullOrEmpty(oriStr))
             {
-                return oriStr.IndexOf();
+                return oriStr.IndexOf("Took")>=0&&oriStr.IndexOf("seconds")>=0;
             }
             return isMatch;
         }

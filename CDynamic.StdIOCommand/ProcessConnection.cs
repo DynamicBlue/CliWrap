@@ -1,5 +1,7 @@
 ﻿using CDShellWrap;
 using CDynamic.StdIODriver.Modes;
+using CDynamic.StdIODriver.Runtime;
+using Dynamic.Core.Auxiliary;
 using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -13,6 +15,7 @@ namespace CDynamic.StdIODriver
     /// </summary>
     public class ProcessConnection : IDisposable
     {
+        public DataFrameManager _DataFrameManager { get; set; }
         /// <summary>
         /// 连接字符串(连接子进程的路径)
         /// </summary>
@@ -26,16 +29,21 @@ namespace CDynamic.StdIODriver
 
         public ConnStatus Open(Action<string> reciveOnlineData, string args = null)
         {
-
+            _DataFrameManager = new DataFrameManager();
             this.Status = ConnStatus.Opening;
             if (CliDriver == null)
             {
                 CliDriver = Cli.Wrap(ConnectionStr, args);
             }
+            this._DataFrameManager.Start();
             CliDriver.ListenAsync();
-            
+
             CliDriver.SetStandardOutputCallback((msg) =>
             {
+                if (_DataFrameManager != null)
+                {
+                    _DataFrameManager.Push(new DataFrameStr(msg));
+                }
                 if (reciveOnlineData != null)
                 {
                     reciveOnlineData.Invoke(msg);
@@ -48,9 +56,9 @@ namespace CDynamic.StdIODriver
             });
             CliDriver.SetStandardErrorCallback((msg) =>
             {
-            
-              //  this.Dispose();
-              //  throw new Exception(msg);
+
+                //  this.Dispose();
+                //  throw new Exception(msg);
             });
             CliDriver.SetStandardErrorClosedCallback(() =>
             {
@@ -73,6 +81,14 @@ namespace CDynamic.StdIODriver
                 throw new Exception($"连接池状态异常Status={this.Status}");
             }
             CliDriver.SetStandardInput(sata);
+            _DataFrameManager.PushCmdKey(sata);
+            var rtnMst = _DataFrameManager.GetResponse(sata);
+
+            foreach (var item in rtnMst.DataFrameList)
+            {
+                IOHelper.WriteLine(item.Context, ConsoleColor.Red);
+            }
+            Console.WriteLine(rtnMst.DataFrameList.Count);
         }
 
         #region IDisposable Support

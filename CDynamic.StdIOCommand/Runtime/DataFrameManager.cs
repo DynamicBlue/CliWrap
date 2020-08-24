@@ -1,4 +1,6 @@
 ﻿using CDynamic.Command.Defaults;
+using CDynamic.StdIODriver.RegexMacth;
+using Dynamic.Core.Excuter;
 using Dynamic.Core.Extensions;
 using Dynamic.Core.Models;
 using Dynamic.Core.Threading;
@@ -6,18 +8,19 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 
 namespace CDynamic.StdIODriver.Runtime
 {
     public class DataFrameManager
     {
         DataQueue<DataFrameStr> _DataRrameQueue = new DataQueue<DataFrameStr>();
-        DataQueue<DataFrameGroup> _DataRrameGroupManager = new DataQueue<DataFrameGroup>();
+        IDataList<DataFrameGroup> _DataRrameGroupManager = new DataList<DataFrameGroup>();
         ConcurrentQueue<string> _CmdKeyQueue = new ConcurrentQueue<string>();
         private readonly object _lockObj = new object();
         private readonly object _FrameGroupLockObj = new object();
         private volatile bool IsStarted = false;
-
+        ManualResetEvent _reciveARE = new ManualResetEvent(false);
         public void PushCmdKey(string cmdKey)
         {
             _CmdKeyQueue.Enqueue(cmdKey);
@@ -25,6 +28,7 @@ namespace CDynamic.StdIODriver.Runtime
         public void Push(DataFrameStr dataFrameStr)
         {
             _DataRrameQueue.Push(new DataItem<DataFrameStr>() { Data = dataFrameStr, ReceivedTime = DateTime.Now });
+           // _reciveARE.Set();
         }
         public void Start()
         {
@@ -46,18 +50,23 @@ namespace CDynamic.StdIODriver.Runtime
                         }
                     }
                 }
-            }, 3000, 10000);
+            }, 10, 10000);
             IsStarted = true;
         }
         protected DataFrameGroup ProductDataGroup(string cmdKey)
         {
+             IMatch cmdEndMatch = new CmdEndMatch();
             DataFrameGroup dataFrameGroup = null;
-            while (_DataRrameQueue.Count() > 0)
+            while (true)
             {
+                if (_DataRrameQueue.Count() <= 0)
+                {
+                    _reciveARE.WaitOne(10000);
+                }
                 DataItem<DataFrameStr> currentDataFrame = null;
                 lock (_lockObj)
                 {
-                    currentDataFrame = _DataRrameQueue.Get(TimeSpan.FromSeconds(3));
+                    currentDataFrame = _DataRrameQueue.Get(TimeSpan.FromSeconds(20));
                 }
                 if (currentDataFrame != null && currentDataFrame.Data != null)
                 {
@@ -65,13 +74,39 @@ namespace CDynamic.StdIODriver.Runtime
                     {
                         dataFrameGroup = new DataFrameGroup(cmdKey);
                     }
-                    var 
-                    if()
-                    dataFrameGroup.Add(currentDataFrame.Data);
+                    else
+                    {
+                        if (dataFrameGroup == null)
+                        {
+                            continue;
+                        }
+                        if (cmdEndMatch.Match(currentDataFrame.Data.Context))
+                        {
+                            //this is frameend
+                            break;
+                        }
+                        else
+                        {
+                            dataFrameGroup.Add(currentDataFrame.Data);
+                        }
+                    }
                 }
                
             }
             return dataFrameGroup;
+        }
+
+        public DataFrameGroup GetResponse(string cmdKey)
+        {
+            lock (_FrameGroupLockObj)
+            {
+                var dataRG = _DataRrameGroupManager.Get(f => f.Data.CmdKey == cmdKey, TimeSpan.FromMilliseconds(3000));
+                if (dataRG != null)
+                {
+                    return dataRG.Data;
+                }
+                return null;
+            }
         }
     }
 }

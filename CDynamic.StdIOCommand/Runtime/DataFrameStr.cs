@@ -12,7 +12,7 @@ namespace CDynamic.StdIODriver.Runtime
 
         public DateTime ReciveTime { get; set; }
 
-        public DataFrameStr(string key,string context)
+        public DataFrameStr(string context, string key=null)
         {
             this.ReciveTime = DateTime.Now;
             this.Context = context;

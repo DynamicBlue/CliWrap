@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using CDynamic.StdIODriver;
+using Dynamic.Core.Log;
 
 namespace CDynamic.StdIODriver.TestIn
 {
@@ -9,6 +10,7 @@ namespace CDynamic.StdIODriver.TestIn
 
         static void Main(string[] args)
         {
+            LoggerManager.InitLogger(new LogConfig());
             var testIn = @"C:\Users\Administrator\Desktop\应用工具\alihbase-2.0.9\bin\hbase.cmd";
             //var testIn = @"E:\WorkSpace\opensource\DCliWrap\CMDDemo\bin\Debug\netcoreapp3.1\CMDDemo.exe";
             ProcessConnection processConnection = new ProcessConnection();
