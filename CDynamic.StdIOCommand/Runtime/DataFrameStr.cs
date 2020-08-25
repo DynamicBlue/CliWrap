@@ -35,7 +35,19 @@ namespace CDynamic.StdIODriver.Runtime
         {
             this.DataFrameList.Add(dataFrame);
         }
-
+        public override string ToString()
+        {
+            if (this.DataFrameList != null&&this.DataFrameList.Count>0)
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                foreach (var item in this.DataFrameList)
+                {
+                    stringBuilder.AppendLine(item.Context);
+                }
+                return stringBuilder.ToString();
+            }
+            return base.ToString();
+        }
     }
 
    

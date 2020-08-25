@@ -17,7 +17,7 @@ namespace CDynamic.StdIODriver.TestIn
             processConnection.ConnectionStr = testIn;
             var connectMsg=processConnection.Open((msg) =>
             {
-                Console.WriteLine(msg);
+                //Console.WriteLine(msg);
             }, "shell");
             Console.WriteLine(connectMsg);
             while (processConnection.Status!=ConnStatus.Disposed)

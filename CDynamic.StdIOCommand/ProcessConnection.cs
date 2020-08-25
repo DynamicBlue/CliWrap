@@ -84,11 +84,9 @@ namespace CDynamic.StdIODriver
             _DataFrameManager.PushCmdKey(sata);
             var rtnMst = _DataFrameManager.GetResponse(sata);
 
-            foreach (var item in rtnMst.DataFrameList)
-            {
-                IOHelper.WriteLine(item.Context, ConsoleColor.Red);
-            }
-            Console.WriteLine(rtnMst.DataFrameList.Count);
+           
+           IOHelper.WriteLine(rtnMst.ToString(), ConsoleColor.Red);
+          
         }
 
         #region IDisposable Support

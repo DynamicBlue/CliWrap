@@ -1,5 +1,6 @@
 ﻿using CDynamic.Command.Defaults;
 using CDynamic.StdIODriver.RegexMacth;
+using Dynamic.Core.Auxiliary;
 using Dynamic.Core.Excuter;
 using Dynamic.Core.Extensions;
 using Dynamic.Core.Models;
@@ -24,11 +25,13 @@ namespace CDynamic.StdIODriver.Runtime
         public void PushCmdKey(string cmdKey)
         {
             _CmdKeyQueue.Enqueue(cmdKey);
+            _reciveARE.Set();
         }
         public void Push(DataFrameStr dataFrameStr)
         {
-            _DataRrameQueue.Push(new DataItem<DataFrameStr>() { Data = dataFrameStr, ReceivedTime = DateTime.Now });
-           // _reciveARE.Set();
+            IOHelper.WriteLine(dataFrameStr.Context,ConsoleColor.Green);
+            _DataRrameQueue.Push(new DataItem<DataFrameStr>() { Data = dataFrameStr,ProductID=dataFrameStr.Context, ReceivedTime = DateTime.Now });
+       
         }
         public void Start()
         {
@@ -61,12 +64,17 @@ namespace CDynamic.StdIODriver.Runtime
             {
                 if (_DataRrameQueue.Count() <= 0)
                 {
-                    _reciveARE.WaitOne(10000);
+                    _reciveARE.WaitOne();
                 }
                 DataItem<DataFrameStr> currentDataFrame = null;
                 lock (_lockObj)
                 {
                     currentDataFrame = _DataRrameQueue.Get(TimeSpan.FromSeconds(20));
+                    if (currentDataFrame == null)
+                    {
+                        continue;
+                    }
+                   // IOHelper.WriteLine(currentDataFrame.Data.Context,ConsoleColor.Blue);
                 }
                 if (currentDataFrame != null && currentDataFrame.Data != null)
                 {
